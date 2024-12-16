@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+</head>
+<body>
+    <h1>Weather App</h1>
+    
+    <!-- Weather Search Form -->
+    <form method="POST">
+        {% csrf_token %}
+        <input type="text" name="city" placeholder="Enter city name" required>
+        <button type="submit">Get Weather</button>
+    </form>
+
+    <!-- Error Message -->
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+
+    <!-- Weather Data -->
+    {% if weather_data.city %}
+        <h2>Weather in {{ weather_data.city }}</h2>
+        <p>Temperature: {{ weather_data.temperature }}°C</p>
+        <p>Condition: {{ weather_data.description }}</p>
+        <img src="http://openweathermap.org/img/w/{{ weather_data.icon }}.png" alt="Weather Icon">
+    {% endif %}
+
+    <hr>
+
+    <!-- Recent Searches -->
+    <h2>Recent Searches</h2>
+    <ul>
+        {% for search in recent_searches %}
+            <li>
+                {{ search.city }} ({{ search.timestamp|date:"M d, Y H:i" }})
+            </li>
+        {% empty %}
+            <li>No recent searches found.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
